@@ -1,12 +1,15 @@
+#include <limits.h> 
 #include <iostream>
 
 using namespace std;
 
 
-int maxCross(int a[], int low, int mid, int high) { 
+int maxCross(int a[], int low, int mid, int high) 
+{ 
     int sum = 0;
     int Left = INT_MIN; 
-    for (int i = mid; i >= low; i--) { 
+    for (int i = mid; i >= low; i--) 
+    { 
         sum = sum + a[i]; 
         if (sum > Left) 
           Left = sum; 
@@ -14,7 +17,8 @@ int maxCross(int a[], int low, int mid, int high) {
   
     sum = 0; 
     int Right = INT_MIN;
-    for (int i = mid+1; i <= high; i++) { 
+    for (int i = mid+1; i <= high; i++) 
+    { 
         sum = sum + a[i]; 
         if (sum > Right) 
           Right = sum; 
@@ -27,11 +31,12 @@ int maxCross(int a[], int low, int mid, int high) {
 int maxarray(int a[], int low, int high) 
 { 
 
-   if (low == high) {
+   if (low == high)
+    {
      return a[low]; 
     }
 
-   int mid = (low + high)/2;
+   int mid = (low + high)/2;  //divide and conquer
    if (maxarray(a, low, mid) >= maxarray(a, mid+1, high) && 
        maxarray(a, low, mid) >= maxCross(a, low, mid, high))
     {
@@ -59,10 +64,11 @@ int main()
         
     int a[Arraysize];
         
-        for (int i = 0; i < Arraysize; i++) {
+        for (int i = 0; i < Arraysize; i++) //fill in the aay
+        {
             cin >> a[i];
         }
-           int Maximized_sum = maxarray(a, 0, Arraysize-1);
+           int Maximized_sum = maxarray(a, 0, Arraysize-1); //return max
            cout<< Maximized_sum; 
            return Maximized_sum; 
 }
