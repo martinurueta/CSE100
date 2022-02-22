@@ -7,53 +7,51 @@ using namespace std;
 int maxCross(int a[], int low, int mid, int high) 
 { 
     int sum = 0;
-    int Left = INT_MIN; 
+    int Left = INT_MIN;
+    int maxLeft; 
     for (int i = mid; i >= low; i--) 
     { 
         sum = sum + a[i]; 
         if (sum > Left) 
-          Left = sum; 
+          Left = sum;
+          maxLeft = i;
     } 
   
     sum = 0; 
     int Right = INT_MIN;
+    int maxRight;
     for (int i = mid+1; i <= high; i++) 
     { 
         sum = sum + a[i]; 
         if (sum > Right) 
           Right = sum; 
+          maxRight = i;
     } 
   
-    return Left + Right;
+    return (maxLeft, maxRight, Left + Right);
 } 
   
 
-int maxarray(int a[], int low, int high) 
-{ 
-
+int maxarray(int a[], int low, int high) { 
+    int left_low, left_high, left_sum, right_low, right_high, right_sum, cross_low, cross_high, cross_sum;
    if (low == high)
     {
-     return a[low]; 
+     return (low, high, a[low]); 
     }
 
-   int mid = (low + high)/2;  //divide and conquer
-   if (maxarray(a, low, mid) >= maxarray(a, mid+1, high) && 
-       maxarray(a, low, mid) >= maxCross(a, low, mid, high))
-    {
-       return maxarray(a, low, mid);
-    }
-    
-   if (maxarray(a, low, mid) <= maxarray(a, mid+1, high) && 
-       maxarray(a, mid+1, high) >= maxCross(a, low, mid, high))
-    {
-       return maxarray(a, mid+1, high);
-    }
-    
-   if (maxCross(a, low, mid, high) >= maxarray(a, mid+1, high) && 
-       maxarray(a, low, mid) <= maxCross(a, low, mid, high))
-    {
-       return maxCross(a, low, mid, high);
-    }
+   int mid = (low + high)/2;
+   (left_low, left_high, left_sum) = maxarray(a, low, mid);
+        (right_low, right_high, right_sum) = maxarray(a, mid+1, high); 
+        (cross_low, cross_high, cross_sum) = maxCross(a, low, mid, high); 
+        if(left_sum >= right_sum && left_sum >= cross_sum){
+            return (left_low, left_high, left_sum);
+        }
+        else if(right_sum >= left_sum && right_sum >= cross_sum){
+            return(right_low, right_high, right_sum);
+        }
+        else{
+            return (cross_low, cross_high, cross_sum);
+        }
 return 0;
 }
 
