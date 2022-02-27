@@ -1,6 +1,7 @@
 #include <iostream>
 
 using namespace std;
+
 int partition (int A[], int p, int r){
     int x = A[r];
     int i = p - 1;
