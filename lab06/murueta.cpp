@@ -30,14 +30,15 @@ void deletehash(list<int>hash[], int num, int size){
     bool found = false;
     for(list<int> :: iterator i = hash[mod].begin(); i != hash[mod].end(); i++){
         if(*i == num){
-            hash[mod].erase(i);
+            hash[k].erase(i);
             cout << num << ":DELETED;" << endl;
             found = true;
+            break;
         }
         k++;
     }
     if(!found){
-        cout << num <<":NOT_FOUND;"<< endl;
+        cout << num <<":DELETE_FAILED;"<< endl;
     }
 }
 void printhash(list<int>hash[], int size){
@@ -50,12 +51,13 @@ void printhash(list<int>hash[], int size){
     }
 }
 
-int main(){
+int main(int argc, const char* argv[]){
     int size;
     char func;
     int num;
+    cin >> size;
     list<int>hash[size];
-    while(size!=0){
+    while(func != 'e'){
         cin >> func;
         if (func == 'i'){
             cin >> num;
@@ -71,9 +73,6 @@ int main(){
         if (func == 'd'){
             cin >> num;
             deletehash(hash, num, size);
-        }
-        if (func == 'e'){
-            break;
         }
     }
     return 0;
