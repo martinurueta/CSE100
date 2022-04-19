@@ -4,47 +4,46 @@
 
 using namespace std;
 
-vector<int> adjacent[500], rev[500], sequenceNum;
+vector<int> adjacent[9999], rev[9999], sequenceNum;
 vector< vector<int> > SCC;
-bool visit[500] = {false};
+bool visit[9999] = {false};// mark all node as not been visited
 
-void DFS(vector<int> graph[], vector<int> &sequenceNum, int i){
+void DFS(vector<int> graph[], vector<int> &sequenceNum, int i){// this is to check if the node has been visited before
 	visit[i] = true;
 	for(int j = 0; j < graph[i].size(); j++){
-		if(!visit[graph[i][j]]){
+		if(!visit[graph[i][j]]){ // calls dfs again to see if node has been visited
             DFS(graph, sequenceNum, graph[i][j]);
-        }
-		
+        }	
 	}
 	sequenceNum.push_back(i);
 }
 
-void setFalse(int num_vertices){
-	for (int i = 0; i < num_vertices; i++)
+void setToFalse(int num){
+	for (int i = 0; i < num; i++)
 		visit[i] = false;
 }
 
-void graph(int edges){
+void graphing(int edges){
 	int u;
     int v;
-	for(int i = 0; i < edges; i++){
+	for(int i = 0; i < edges; i++){// to make the graph (u,v)
         cin >> u;
         cin >> v;  
 		adjacent[u].push_back(v);
 	}
 }
 
-void traverse(int num_vertices){
-	for(int i = 0; i < num_vertices; i++){
+void traverse(int num){
+	for(int i = 0; i < num; i++){
 		for(int j = 0; j < adjacent[i].size(); j++){
 			rev[adjacent[i][j]].push_back(i);
 		}
 	}
 }
 
-void reverse_traverse(){
+void reverseTraverse(){
 	for(int i = 0; i < sequenceNum.size(); i++){
-		if(!visit[sequenceNum[i]]) {
+		if(!visit[sequenceNum[i]]) {// dfs to the revered graph
 			vector<int> component;
 			DFS(rev, component, sequenceNum[i]);
 			SCC.push_back(component);
@@ -52,56 +51,54 @@ void reverse_traverse(){
 	}
 }
 
-void output(int arr_vertices[],int num_vertices){
-	for(int i = 0; i < num_vertices; i++){
-		cout << arr_vertices[i] <<endl;
+void output(int arr[],int num){
+	for(int i = 0; i < num; i++){
+		cout << arr[i] <<endl;
 	}
 }
 
 int main(){
-	int num_vertices;
+	int num;
     int edges; 
     int compare;
 
-    cin >> num_vertices;
+    cin >> num;
     cin >> edges;
 
-	int arr_vertices[num_vertices];
+	int arr[num];
 
-	for(int i = 0; i < num_vertices; i++){
-		arr_vertices[i] = i;
+	for(int i = 0; i < num; i++){// set the numbers to be incrementing
+		arr[i] = i;
 	}
 
-	graph(edges);
+	graphing(edges);
 
-	setFalse(num_vertices);
-
-	for(int i = 0; i < num_vertices; i++){ 
+	for(int i = 0; i < num; i++){ 
 		if(!visit[i]){
 			DFS(adjacent, sequenceNum, i);
 		}
 	}
 
-	traverse(num_vertices);
+	traverse(num);
 
-	setFalse(num_vertices);
+	setToFalse(num);// reset to start the reverse traverse
 
-	reverse(sequenceNum.begin(), sequenceNum.end());
-
-	reverse_traverse(); 
+	reverse(sequenceNum.begin(), sequenceNum.end()); // deseading order from the stack
+	
+	reverseTraverse(); 
 
 	for(int i = 0; i < SCC.size(); i++){
 		for(int j = 0; j < SCC[i].size(); j++){
 			compare = SCC[i][j];
-			for(int k = 0; k < num_vertices; k++){
-				if(arr_vertices[k] == compare){
-					arr_vertices[k] = *min_element(SCC[i].begin(), SCC[i].end());
+			for(int k = 0; k < num; k++){
+				if(arr[k] == compare){
+					arr[k] = *min_element(SCC[i].begin(), SCC[i].end());
 				}
 			}
 		}
 	}
 
-	output(arr_vertices, num_vertices);
+	output(arr, num);
 	
 	return 0;
 }
